@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from unixtil.runner import CommandRunner
 from unixtil.file_manager import FileManager
 from unixtil.bash_manager import BashScriptManager
