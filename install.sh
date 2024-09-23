@@ -13,7 +13,7 @@ yes | pkg update
 termux-setup-storage
 # Install hardware acceleration, proot-distro, sound, and firefox
 pkg install dbus proot-distro pulseaudio virglrenderer-android -y
-pkg install pavucontrol-qt git python -y
+pkg install pavucontrol-qt -y
 # Install ubuntu in proot-distro
 yes | pd install ubuntu
 # Update proot-distro
@@ -52,6 +52,18 @@ pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymou
 
 echo "
 source .sound" >> .bashrc
+
+
+pd login ubuntu --shared-tmp -- env DISPLAY=:1 sudo wget https://raw.githubusercontent.com/L4ur3nsk1s/UNIXTIL/refs/heads/main/scripts/zsh.sh
+
+pd login ubuntu --shared-tmp -- env DISPLAY=:1 sudo wget https://raw.githubusercontent.com/L4ur3nsk1s/UNIXTIL/refs/heads/main/scripts/nvim.sh
+
+pd login ubuntu --shared-tmp -- env DISPLAY=:1 sudo wget https://raw.githubusercontent.com/L4ur3nsk1s/UNIXTIL/refs/heads/main/scripts/extra.sh
+
+pd login ubuntu --shared-tmp -- env DISPLAY=:1 sudo chmod +x zsh.sh
+pd login ubuntu --shared-tmp -- env DISPLAY=:1 sudo chmod +x nvim.sh
+pd login ubuntu --shared-tmp -- env DISPLAY=:1 sudo chmod +x extra.sh
+
 # Setup termux to allow x11 app
 yes | pkg install termux-x11-nightly
 echo "allow-external-apps = true" >> ~/.termux/termux.properties
