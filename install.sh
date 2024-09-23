@@ -13,7 +13,7 @@ yes | pkg update
 termux-setup-storage
 # Install hardware acceleration, proot-distro, sound, and firefox
 pkg install dbus proot-distro pulseaudio virglrenderer-android -y
-pkg install pavucontrol-qt -y
+pkg install pavucontrol-qt git python -y
 # Install ubuntu in proot-distro
 yes | pd install ubuntu
 # Update proot-distro
