@@ -10,12 +10,12 @@ prompt_for_user_credentials() {
 # Function to install necessary packages and set up Ubuntu
 setup_ubuntu() {
     termux-change-repo
-    yes | pkg install x11-repo
+    yes | pkg install x11-repo proot-distro
     yes | pkg update
     termux-setup-storage
     
     # Install necessary packages
-    pkg install dbus proot-distro pulseaudio virglrenderer-android pavucontrol-qt -y
+    pkg install dbus  pulseaudio virglrenderer-android pavucontrol-qt -y
     
     # Install Ubuntu
     yes | pd install ubuntu
@@ -63,7 +63,9 @@ pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymou
 source .sound" >> $HOME/.bashrc
     
     yes | pkg install termux-x11-nightly
-    echo "allow-external-apps = true" >> ~/.termux/termux.properties
+    #echo "allow-external-apps = true" >> ~/.termux/termux.properties
+    sed -i 's/allow-external-apps = true/allow-external-apps = false/' ~/.termux/termux.properties
+
 }
 
 # Function to launch the XFCE desktop environment
