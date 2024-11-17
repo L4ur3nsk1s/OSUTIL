@@ -36,9 +36,21 @@ install_additional_utilities() {
 main() {
     check_root
     update_system
-    install_essential_packages
-    install_development_tools
-    install_additional_utilities
+
+    read -p "Do you want to install essential packages? (yes/no): " install_essentials
+    if [[ $install_essentials == "yes" ]]; then
+        install_essential_packages
+    fi
+
+    read -p "Do you want to install development tools? (yes/no): " install_dev_tools
+    if [[ $install_dev_tools == "yes" ]]; then
+        install_development_tools
+    fi
+
+    read -p "Do you want to install additional utilities? (yes/no): " install_additional_utils
+    if [[ $install_additional_utils == "yes" ]]; then
+        install_additional_utilities
+    fi
 
     echo "All installations are complete!"
 }
