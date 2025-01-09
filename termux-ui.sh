@@ -28,11 +28,10 @@ setup_ubuntu() {
     # Update Ubuntu packages
     pd login ubuntu --shared-tmp -- env DISPLAY=:1 apt update || { echo "Failed to update Ubuntu packages."; exit 1; }
     pd login ubuntu --shared-tmp -- env DISPLAY=:1 apt upgrade -y || { echo "Failed to upgrade Ubuntu packages."; exit 1; }
-    
     # Set timezone
     timezone=$(getprop persist.sys.timezone)
-    pd login ubuntu --shared-tmp -- env DISPLAY=:1 rm -f /etc/localtime || { echo "Failed to remove old timezone."; exit 1; }
-    pd login ubuntu --shared-tmp -- env DISPLAY=:1 cp "/usr/share/zoneinfo/$timezone" /etc/localtime || { echo "Failed to set timezone."; exit 1; }
+    pd login ubuntu --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime
+    pd login ubuntu --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/$timezone /etc/localtime
     
     # Install XFCE and utilities
     pd login ubuntu --shared-tmp -- env DISPLAY=:1 apt install sudo xfce4 xfce4-terminal xfce4-goodies dbus-x11 evince thunar-archive-plugin xarchiver -y || { echo "Failed to install XFCE."; exit 1; }
