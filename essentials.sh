@@ -1,35 +1,40 @@
 #!/bin/bash
 
+# Colors
+GREEN="\e[32m"
+YELLOW="\e[33m"
+RESET="\e[0m"
+
 # Function to check if the script is run as root
 check_root() {
     if [[ $EUID -ne 0 ]]; then
-        echo "This script must be run as root. Please run with sudo."
+        echo -e "${YELLOW}This script must be run as root. Please run with sudo.${RESET}"
         exit 1
     fi
 }
 
 # Update and upgrade the system
 update_system() {
-    echo "Updating and upgrading the system..."
-    sudo apt update && sudo apt upgrade -y
+    echo -e "${GREEN}Updating and upgrading the system...${RESET}"
+    apt update && apt upgrade -y
 }
 
 # Install essential packages
 install_essential_packages() {
-    echo "Installing essential packages..."
-    sudo apt install -y git wget zsh bat eza nala gh
+    echo -e "${GREEN}Installing essential packages...${RESET}"
+    apt install -y git wget zsh bat eza nala gh
 }
 
 # Install development tools
 install_development_tools() {
-    echo "Installing development tools..."
-    sudo apt install -y golang rustc nodejs npm python3 python3-pip php
+    echo -e "${GREEN}Installing development tools...${RESET}"
+    apt install -y golang rustc nodejs npm python3 python3-pip php
 }
 
 # Install additional utilities (optional)
 install_additional_utilities() {
-    echo "Installing additional utilities..."
-    sudo apt install -y build-essential curl
+    echo -e "${GREEN}Installing additional utilities...${RESET}"
+    apt install -y build-essential curl
 }
 
 # Main script execution
@@ -38,21 +43,15 @@ main() {
     update_system
 
     read -p "Do you want to install essential packages? (yes/no): " install_essentials
-    if [[ $install_essentials == "yes" ]]; then
-        install_essential_packages
-    fi
+    [[ $install_essentials == "yes" ]] && install_essential_packages
 
     read -p "Do you want to install development tools? (yes/no): " install_dev_tools
-    if [[ $install_dev_tools == "yes" ]]; then
-        install_development_tools
-    fi
+    [[ $install_dev_tools == "yes" ]] && install_development_tools
 
     read -p "Do you want to install additional utilities? (yes/no): " install_additional_utils
-    if [[ $install_additional_utils == "yes" ]]; then
-        install_additional_utilities
-    fi
+    [[ $install_additional_utils == "yes" ]] && install_additional_utilities
 
-    echo "All installations are complete!"
+    echo -e "${GREEN}All installations are complete!${RESET}"
 }
 
 # Run the main function
