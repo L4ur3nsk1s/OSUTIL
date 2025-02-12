@@ -8,9 +8,18 @@ IF %ERRORLEVEL% NEQ 0 (
     exit /b
 )
 
-REM Enable WSL and Virtual Machine Platform features
-echo Enabling Windows Subsystem for Linux (WSL) and Virtual Machine Platform...
-wsl --install
+REM Check if WSL is already installed
+wsl --list --quiet >nul 2>&1
+IF %ERRORLEVEL% EQU 0 (
+    echo WSL is already installed. Skipping installation...
+) ELSE (
+    echo Enabling Windows Subsystem for Linux (WSL) and Virtual Machine Platform...
+    wsl --install
+    IF %ERRORLEVEL% NEQ 0 (
+        echo Failed to enable WSL. Exiting...
+        exit /b
+    )
+)
 
 REM Wait for the installation to complete
 echo Please wait while WSL installs...
@@ -19,10 +28,18 @@ timeout /t 30
 REM Set the default WSL version to WSL 2
 echo Setting default WSL version to 2...
 wsl --set-default-version 2
+IF %ERRORLEVEL% NEQ 0 (
+    echo Failed to set WSL version. Exiting...
+    exit /b
+)
 
-REM Install Ubuntu (or any other distribution)
+REM Install Ubuntu
 echo Installing Ubuntu...
 wsl --install -d Ubuntu
+IF %ERRORLEVEL% NEQ 0 (
+    echo Failed to install Ubuntu. Exiting...
+    exit /b
+)
 
 REM Wait for the installation to complete
 echo Please wait while Ubuntu installs...

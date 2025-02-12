@@ -7,7 +7,7 @@ This repository contains various initialization scripts designed for Linux-like 
 
 - [Linux Initialization Scripts](#linux-initialization-scripts)
   - [Termux UI Script](#termux-ui-script)
-  - [Essential Setup Script](#essential-setup-script)
+
   - [Neovim Setup Script](#neovim-setup-script)
   - [Zsh Setup Script](#zsh-setup-script)
   - [WSL Setup Script](#wsl-setup-script)
@@ -20,14 +20,6 @@ This script configures the Termux UI settings. You can run the following command
 
 ```bash
 curl -O https://raw.githubusercontent.com/L4ur3nsk1s/OSUTIL/main/termux-ui.sh && chmod +x termux-ui.sh && ./termux-ui.sh
-```
-
-### Essential Setup Script
-
-This script installs the basic packages and configurations required for setting up the environment:
-
-```bash
-curl -O https://raw.githubusercontent.com/L4ur3nsk1s/OSUTIL/main/essentials.sh && chmod +x essentials.sh && ./essentials.sh
 ```
 
 ### Neovim Setup Script
