@@ -27,7 +27,7 @@ curl -O https://raw.githubusercontent.com/L4ur3nsk1s/OSUTIL/main/termux-ui.sh &&
 This script installs and configures Neovim along with plugins and custom settings:
 
 ```bash
-curl -O https://raw.githubusercontent.com/L4ur3nsk1s/OSUTIL/main/scripts/nvim.sh && chmod +x scripts/nvim.sh && ./nvim.sh
+curl -O https://raw.githubusercontent.com/L4ur3nsk1s/OSUTIL/main/scripts/nvim.sh && chmod +x nvim.sh && ./nvim.sh
 ```
 
 ### Zsh Setup Script
@@ -35,7 +35,7 @@ curl -O https://raw.githubusercontent.com/L4ur3nsk1s/OSUTIL/main/scripts/nvim.sh
 This script sets up Zsh with Oh My Zsh and additional plugins and themes:
 
 ```bash
-curl -O https://raw.githubusercontent.com/L4ur3nsk1s/OSUTIL/main/scripts/zsh.sh && chmod +x scripts/zsh.sh && ./zsh.sh
+curl -O https://raw.githubusercontent.com/L4ur3nsk1s/OSUTIL/main/scripts/zsh.sh && chmod +x zsh.sh && ./zsh.sh
 ```
 
 ### WSL Setup Script
@@ -43,7 +43,7 @@ curl -O https://raw.githubusercontent.com/L4ur3nsk1s/OSUTIL/main/scripts/zsh.sh 
 For setting up your WSL environment with necessary configurations, use this script:
 
 ```bash
-curl -O https://raw.githubusercontent.com/L4ur3nsk1s/OSUTIL/main/scripts/wsl.sh && chmod +x scripts/wsl.sh && ./wsl.sh
+curl -O https://raw.githubusercontent.com/L4ur3nsk1s/OSUTIL/main/scripts/wsl.sh && chmod +x wsl.sh && ./wsl.sh
 ```
 
 ---
