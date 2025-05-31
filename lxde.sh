@@ -15,7 +15,7 @@ read -p "👤 Enter a username for the new user: " NEWUSER
 echo "🔧 Configuring Ubuntu environment for user: $NEWUSER"
 proot-distro login ubuntu -- bash -c "
   apt update -y && apt upgrade -y
-  DEBIAN_FRONTEND=noninteractive apt install -y sudo lxde-core lxterminal dbus-x11 x11-utils leafpad fonts-dejavu lxappearance
+  DEBIAN_FRONTEND=noninteractive apt install -y sudo  lxde lxde-core lxterminal dbus-x11 x11-utils  fonts-dejavu lxappearance
 
   # Create user
   useradd -m -s /bin/bash $NEWUSER
