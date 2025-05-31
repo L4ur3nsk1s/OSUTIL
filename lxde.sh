@@ -51,7 +51,7 @@ proot-distro login ubuntu -- bash -c "
   apt update -y
   [[ $FAST -eq 0 ]] && apt upgrade -y
 
-  DEBIAN_FRONTEND=noninteractive apt install -y sudo lxde-core lxterminal dbus-x11 x11-utils leafpad fonts-dejavu lxappearance desktop-file-utils
+  DEBIAN_FRONTEND=noninteractive apt install -y sudo  lxde lxde-core lxterminal dbus-x11 x11-utils fonts-dejavu lxappearance desktop-file-utils
 
   # Create user if not exists
   if ! id -u \"$NEWUSER\" &>/dev/null; then
