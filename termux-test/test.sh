@@ -359,7 +359,7 @@ main() {
   echo "Neovim installed with vim-plug for plugin management."
   echo "Rust, Python, Node.js toolchains installed and ready."
   echo "Enter Ubuntu PRoot with: startubuntu"
-  echo "If installed, launch XFCE inside Ubuntu with: ./startxfce.sh (after entering Ubuntu)"
+  
 }
 
 main "$@"
