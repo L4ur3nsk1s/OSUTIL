@@ -179,39 +179,18 @@ setup_rust_toolchain() {
 # ---------- Neovim setup ----------
 
 setup_neovim_plug() {
-  local nvim_autoload="$HOME/.local/share/nvim/site/autoload"
-  local plug_file="$nvim_autoload/plug.vim"
+  info "Installing NvChad Starter config for Neovim..."
 
-  if [ ! -f "$plug_file" ]; then
-    info "Installing vim-plug for Neovim..."
-    mkdir -p "$nvim_autoload"
-    curl -fLo "$plug_file" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  # Backup existing config if it exists
+  if [ -d "$HOME/.config/nvim" ]; then
+    local backup_dir="$HOME/.config/nvim.bak_$(date +%s)"
+    mv "$HOME/.config/nvim" "$backup_dir"
+    info "Existing Neovim config backed up to $backup_dir"
   fi
 
-  local nvim_config_dir="$HOME/.config/nvim"
-  local nvim_init="$nvim_config_dir/init.vim"
-
-  if [ ! -f "$nvim_init" ]; then
-    info "Creating basic Neovim config..."
-    mkdir -p "$nvim_config_dir"
-    cat > "$nvim_init" << EOF
-call plug#begin('~/.local/share/nvim/plugged')
-
-" Example plugins:
-" Plug 'tpope/vim-sensible'
-
-call plug#end()
-
-syntax on
-set number
-set relativenumber
-set tabstop=4
-set shiftwidth=4
-set expandtab
-EOF
-  else
-    info "Neovim init.vim already exists, skipping"
-  fi
+  git clone https://github.com/NvChad/starter ~/.config/nvim --depth 1
+  info "NvChad Starter installed! Launching Neovim to finalize setup..."
+  nvim
 }
 
 # ---------- fastfetch setup ----------
