@@ -19,14 +19,22 @@ install_core_packages() {
   info "Updating Ubuntu packages..."
   sudo apt update && sudo apt upgrade -y
   info "Installing core packages..."
-  sudo apt install -y python3 python3-pip python3-venv nodejs npm rustc cargo zsh neovim openssh-client htop curl wget git tmux fzf ripgrep fd-find bat autojump sudo
-  # Note: 'bat' might be installed as 'batcat' in Ubuntu, autojump requires additional setup below
+  sudo apt install -y \
+    python3 python3-pip python3-venv \
+    nodejs npm \
+    rustc cargo \
+    zsh neovim \
+    openssh-client \
+    htop curl wget git tmux \
+    fzf ripgrep fd-find bat autojump \
+    sudo fastfetch unzip
 }
 
 install_oh_my_zsh() {
   if [ ! -d "$HOME/.oh-my-zsh" ]; then
     info "Installing Oh My Zsh (unattended)..."
-    RUNZSH=no CHSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    RUNZSH=no CHSH=no KEEP_ZSHRC=yes sh -c \
+      "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   else
     info "Oh My Zsh already installed"
   fi
@@ -48,11 +56,13 @@ install_zsh_plugins() {
   local zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
   if [ ! -d "${zsh_custom}/plugins/zsh-autosuggestions" ]; then
     info "Installing zsh-autosuggestions plugin..."
-    git clone https://github.com/zsh-users/zsh-autosuggestions "${zsh_custom}/plugins/zsh-autosuggestions"
+    git clone https://github.com/zsh-users/zsh-autosuggestions \
+      "${zsh_custom}/plugins/zsh-autosuggestions"
   fi
   if [ ! -d "${zsh_custom}/plugins/zsh-syntax-highlighting" ]; then
     info "Installing zsh-syntax-highlighting plugin..."
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${zsh_custom}/plugins/zsh-syntax-highlighting"
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
+      "${zsh_custom}/plugins/zsh-syntax-highlighting"
   fi
 }
 
@@ -62,7 +72,6 @@ configure_zshrc() {
   info "Writing new .zshrc configuration..."
   cat > "$zshrc" << 'EOF'
 export ZSH="$HOME/.oh-my-zsh"
-
 ZSH_THEME="agnoster"
 
 plugins=(
@@ -94,8 +103,8 @@ alias h='htop'
 alias vi='nvim'
 alias c='clear'
 alias venv='python3 -m venv .venv && source .venv/bin/activate'
-alias bat='batcat' # Ubuntu uses 'batcat' command
-alias ports='ss -tuln' # netstat is deprecated, ss is recommended
+alias bat='batcat'
+alias ports='ss -tuln'
 alias df='df -h'
 alias du='du -h --max-depth=1'
 
@@ -139,7 +148,8 @@ EOF
 
 upgrade_pip_and_install_python_pkgs() {
   info "Upgrading pip and installing Python packages..."
-  python3 -m pip install --upgrade pip setuptools wheel virtualenv requests flask
+  python3 -m pip install --upgrade pip setuptools wheel virtualenv \
+    requests flask black isort
 }
 
 setup_rust_toolchain() {
@@ -152,37 +162,18 @@ setup_rust_toolchain() {
   fi
 }
 
-setup_neovim_plug() {
-  local nvim_autoload="$HOME/.local/share/nvim/site/autoload"
-  local plug_file="$nvim_autoload/plug.vim"
-  if [ ! -f "$plug_file" ]; then
-    info "Installing vim-plug for Neovim..."
-    mkdir -p "$nvim_autoload"
-    curl -fLo "$plug_file" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+setup_neovim_nvchad() {
+  info "Installing NvChad Starter config for Neovim..."
+
+  if [ -d "$HOME/.config/nvim" ]; then
+    local backup_dir="$HOME/.config/nvim.bak_$(date +%s)"
+    mv "$HOME/.config/nvim" "$backup_dir"
+    info "Existing Neovim config backed up to $backup_dir"
   fi
-  local nvim_config_dir="$HOME/.config/nvim"
-  local nvim_init="$nvim_config_dir/init.vim"
-  if [ ! -f "$nvim_init" ]; then
-    info "Creating basic Neovim config..."
-    mkdir -p "$nvim_config_dir"
-    cat > "$nvim_init" << EOF
-call plug#begin('~/.local/share/nvim/plugged')
 
-" Example plugins:
-" Plug 'tpope/vim-sensible'
-
-call plug#end()
-
-syntax on
-set number
-set relativenumber
-set tabstop=4
-set shiftwidth=4
-set expandtab
-EOF
-  else
-    info "Neovim init.vim already exists, skipping"
-  fi
+  git clone https://github.com/NvChad/starter "$HOME/.config/nvim" --depth 1
+  info "NvChad Starter installed! Launching Neovim to finalize setup..."
+  nvim
 }
 
 setup_fastfetch_config() {
@@ -201,35 +192,6 @@ EOF
   fi
 }
 
-install_xfce_vnc() {
-  read -rp "Install XFCE desktop + VNC server? (y/N): " xfce_choice
-  if [[ "$xfce_choice" =~ ^[Yy]$ ]]; then
-    info "Installing XFCE + VNC..."
-    sudo apt update
-    sudo apt install -y xfce4 tigervnc-standalone-server dbus-x11
-
-    mkdir -p "$HOME/.vnc"
-    echo "wsl" | vncpasswd -f > "$HOME/.vnc/passwd"
-    chmod 600 "$HOME/.vnc/passwd"
-
-    cat > "$HOME/startxfce.sh" << 'EOL'
-#!/bin/bash
-export DISPLAY=:1
-vncserver -kill :1 > /dev/null 2>&1 || true
-vncserver :1 -geometry 1280x720 -depth 24 -localhost no
-echo "VNC server started at :1"
-echo "Connect your VNC client to <your-windows-ip>:5901"
-echo "Default password is 'wsl' (change in ~/.vnc/passwd)"
-echo "Stop the server with: vncserver -kill :1"
-EOL
-
-    chmod +x "$HOME/startxfce.sh"
-    info "XFCE + VNC setup complete. Use ./startxfce.sh to start the desktop."
-  else
-    info "Skipping XFCE + VNC installation."
-  fi
-}
-
 main() {
   install_core_packages
   install_oh_my_zsh
@@ -239,19 +201,13 @@ main() {
   configure_ssh
   upgrade_pip_and_install_python_pkgs
   setup_rust_toolchain
-  setup_neovim_plug
+  setup_neovim_nvchad
   setup_fastfetch_config
-  install_xfce_vnc
 
   echo ""
   info "Setup complete!"
   echo "Restart your terminal or run 'zsh' to start your new shell."
-  echo "Use 'htop' to monitor system processes."
-  echo "Use 'fastfetch' for quick system info."
-  echo "Use 'batcat' as an enhanced 'cat' with syntax highlighting."
-  echo "Neovim installed with vim-plug for plugin management."
-  echo "Rust, Python, Node.js toolchains installed and ready."
-  echo "If installed, start XFCE desktop with: ./startxfce.sh"
+  echo "Neovim now uses NvChad Starter — open it and wait for plugin installation."
 }
-
 main "$@"
+
