@@ -19,11 +19,13 @@ install_core_packages() {
   info "Updating Ubuntu packages..."
   sudo apt update && sudo apt upgrade -y
   info "Installing core packages..."
+  wget -qO- https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz | tar xz && sudo cp -r nvim-linux-x86_64/* /usr/local/ && rm -rf nvim-linux-x86_64
+
   sudo apt install -y \
     python3 python3-pip python3-venv \
     nodejs npm \
     rustc cargo \
-    zsh neovim \
+    zsh \
     openssh-client \
     htop curl wget git tmux \
     fzf ripgrep fd-find bat autojump \
