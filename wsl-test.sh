@@ -27,7 +27,7 @@ install_core_packages() {
     openssh-client \
     htop curl wget git tmux \
     fzf ripgrep fd-find bat autojump \
-    sudo fastfetch unzip
+   unzip
 }
 
 install_oh_my_zsh() {
@@ -176,12 +176,50 @@ setup_neovim_nvchad() {
   nvim
 }
 
+setup_fastfetch() {
+  local api_url="https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest"
+  local version
+  version=$(curl -fsSL "$api_url" | grep -Po '"tag_name": "\K.*?(?=")')
+  
+  if [[ -z "$version" ]]; then
+    error "Could not retrieve the latest Fastfetch version."
+    return 1
+  fi
+
+  info "Latest fastfetch version: $version"
+
+  local arch
+  case "$(uname -m)" in
+    x86_64) arch="amd64" ;;
+    aarch64|arm64) arch="aarch64" ;;
+    armv7l) arch="armv7l" ;;
+    *) 
+      error "Unsupported architecture: $(uname -m)"
+      return 1
+      ;;
+  esac
+
+  local url="https://github.com/fastfetch-cli/fastfetch/releases/download/${version}/fastfetch-linux-${arch}.deb"
+  local tmp="/tmp/fastfetch.deb"
+
+  info "Downloading Fastfetch ${version} for ${arch}..."
+  if ! curl -fsSL "$url" -o "$tmp"; then
+    error "Download failed: $url"
+    return 1
+  fi
+
+  info "Installing fastfetch..."
+  sudo dpkg -i "$tmp" || sudo apt -f install -y
+
+  setup_fastfetch_config
+}
+
 setup_fastfetch_config() {
   local conf="$HOME/.config/fastfetch/config.conf"
   mkdir -p "$(dirname "$conf")"
   if [ ! -f "$conf" ]; then
     info "Creating fastfetch config..."
-    cat > "$conf" << EOF
+    cat > "$conf" << 'EOF'
 show_cpu=true
 show_gpu=true
 show_memory=true
@@ -191,6 +229,7 @@ EOF
     info "fastfetch config already exists"
   fi
 }
+
 
 main() {
   install_core_packages
@@ -202,7 +241,7 @@ main() {
   upgrade_pip_and_install_python_pkgs
   setup_rust_toolchain
   setup_neovim_nvchad
-  setup_fastfetch_config
+  setup_fastfetch
 
   echo ""
   info "Setup complete!"
