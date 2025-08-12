@@ -52,17 +52,18 @@ set_zsh_default_shell() {
 
 install_zsh_plugins() {
   local zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-
   if [ ! -d "${zsh_custom}/plugins/zsh-autosuggestions" ]; then
     info "Installing zsh-autosuggestions plugin..."
-    git clone https://github.com/zsh-users/zsh-autosuggestions "${zsh_custom}/plugins/zsh-autosuggestions"
+    git clone https://github.com/zsh-users/zsh-autosuggestions \
+      "${zsh_custom}/plugins/zsh-autosuggestions"
   fi
-
   if [ ! -d "${zsh_custom}/plugins/zsh-syntax-highlighting" ]; then
     info "Installing zsh-syntax-highlighting plugin..."
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${zsh_custom}/plugins/zsh-syntax-highlighting"
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
+      "${zsh_custom}/plugins/zsh-syntax-highlighting"
   fi
 }
+
 
 configure_zshrc() {
   local zshrc="$HOME/.zshrc"
@@ -243,9 +244,6 @@ setup_proot_distro() {
   cat > "$setup_script" << EOF
 #!/bin/bash
 set -e
-
-# Change repo to Lithuania mirror
-sed -i.bak -r 's|http://archive.ubuntu.com/ubuntu/|http://lt.archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list
 
 apt update
 
