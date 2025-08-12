@@ -238,7 +238,7 @@ main() {
   install_zsh_plugins
   configure_zshrc
   configure_ssh
-  upgrade_pip_and_install_python_pkgs
+  ##upgrade_pip_and_install_python_pkgs
   setup_rust_toolchain
   setup_neovim_nvchad
   setup_fastfetch
